@@ -45,11 +45,6 @@ class _MapTravauxState extends State<MapTravaux> {
     );
   }
 
-  Future<void> fetchData() async {
-    final response = await http.get(
-      'https://data.angers.fr/api/explore/v2.1/catalog/datasets/info-travaux/records?limit=20'
-          as Uri,
-
   // Function to show a pop-up when the marker is clicked
   void _showMarkerPopup(BuildContext context) {
     showDialog(
