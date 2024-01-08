@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/travaux_cubit.dart';
 import '../../models/travaux.dart';
 
-class TravauxDetails extends StatelessWidget {
-  const TravauxDetails({super.key});
+class EnsembleTravaux extends StatelessWidget {
+  const EnsembleTravaux({super.key});
 
   @override
   Widget build(BuildContext context) {
