@@ -1,8 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'blocs/travaux_cubit.dart';
 import 'router.dart';
+=======
+import 'my_app.dart';
 
 void main() {
   // Pour pouvoir utiliser les SharePreferences avant le runApp
