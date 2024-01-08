@@ -7,7 +7,7 @@ class Travaux {
   String? address;
   String? startAt;
   String? endAt;
-  Traffic? traffic;
+  String? traffic;
   int? contact;
   String? email;
   int? isTramway;
