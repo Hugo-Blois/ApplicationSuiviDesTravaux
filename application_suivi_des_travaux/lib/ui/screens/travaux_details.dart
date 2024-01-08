@@ -26,6 +26,12 @@ class TravauxDetails extends StatelessWidget {
                     Text('Address: ${travaux.address ?? ''}'),
                     Text('Start At: ${travaux.startAt ?? ''}'),
                     Text('End At: ${travaux.endAt ?? ''}'),
+                    Text('Traffic : ${travaux.traffic ?? ''}'),
+                    Text('Contact: ${travaux.contact ?? ''}'),
+                    Text('Email: ${travaux.email ?? ''}'),
+                    Text('Tramway: ${travaux.isTramway ?? ''}'),
+                    Text('Longitude: ${travaux.long ?? ''}'),
+                    Text('Latitude: ${travaux.lat ?? ''}'),
                   ],
                 ),
               )

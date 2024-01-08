@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'blocs/travaux_cubit.dart';
@@ -18,7 +17,6 @@ void main() {
     create: (_) => travauxCubit,
     child: const MyApp(),
   ));
-
 }
 
 class MyApp extends StatelessWidget {
