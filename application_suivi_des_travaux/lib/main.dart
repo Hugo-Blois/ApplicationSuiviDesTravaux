@@ -17,7 +17,6 @@ void main() {
     create: (_) => travauxCubit,
     child: const MyApp(),
   ));
-
 }
 
 class MyApp extends StatelessWidget {
