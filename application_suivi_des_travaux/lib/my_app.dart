@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'my_map.dart';
+import 'ui/screens/map_travaux.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyMap(),
+      home: const MapTravaux(),
     );
   }
 }

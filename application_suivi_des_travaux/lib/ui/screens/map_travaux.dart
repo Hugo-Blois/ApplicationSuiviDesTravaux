@@ -2,20 +2,22 @@ import 'dart:convert';
 
 import 'package:application_suivi_des_travaux/work_zone_details_page.dart';
 import 'package:application_suivi_des_travaux/work_zone_list_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-import 'work_zone.dart';
+import '../../work_zone.dart';
 
-class MyMap extends StatefulWidget {
-  const MyMap({super.key});
+class MapTravaux extends StatefulWidget {
+  const MapTravaux({super.key});
 
   @override
-  _MyMapState createState() => _MyMapState();
+  // ignore: library_private_types_in_public_api
+  _MapTravauxState createState() => _MapTravauxState();
 }
 
-class _MyMapState extends State<MyMap> {
+class _MapTravauxState extends State<MapTravaux> {
   MapController mapController = MapController();
   List<Marker> markers = [];
   List<WorkZone> workZones = [];
@@ -45,16 +47,16 @@ class _MyMapState extends State<MyMap> {
             width: 40.0,
             height: 40.0,
             point: LatLng(lat, lon),
-            builder: (ctx) => Container(
-              child: Icon(Icons.work),
-            ),
+            builder: (ctx) => const Icon(Icons.work),
           ),
         );
       }
 
       setState(() {});
     } else {
-      print('Failed to fetch data: ${response.statusCode}');
+      if (kDebugMode) {
+        print('Failed to fetch data: ${response.statusCode}');
+      }
     }
   }
 
@@ -101,14 +103,14 @@ class _MyMapState extends State<MyMap> {
               children: [
                 FloatingActionButton(
                   onPressed: zoomIn,
-                  child: Icon(Icons.add),
                   mini: true,
+                  child: const Icon(Icons.add),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 FloatingActionButton(
                   onPressed: zoomOut,
-                  child: Icon(Icons.remove),
                   mini: true,
+                  child: const Icon(Icons.remove),
                 ),
               ],
             ),
@@ -126,7 +128,7 @@ class _MyMapState extends State<MyMap> {
                   ),
                 );
               },
-              child: Text('Voir les travaux'),
+              child: const Text('Voir les travaux'),
             ),
           ),
         ],
