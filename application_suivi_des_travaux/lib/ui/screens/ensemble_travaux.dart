@@ -5,7 +5,7 @@ import '../../blocs/travaux_cubit.dart';
 import '../../models/travaux.dart';
 
 class EnsembleTravaux extends StatelessWidget {
-  const EnsembleTravaux({super.key});
+  const EnsembleTravaux({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +13,15 @@ class EnsembleTravaux extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Détails des travaux :'),
       ),
-      body: BlocBuilder<TravauxCubit, Travaux>(builder: (context, travaux) {
-        return travaux != null
-            ? Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+      body: BlocBuilder<TravauxCubit, List<Travaux>>(
+        builder: (context, travauxList) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView.builder(
+              itemCount: travauxList.length,
+              itemBuilder: (context, index) {
+                final Travaux travaux = travauxList[index];
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('ID: ${travaux.id ?? ''}'),
@@ -32,13 +36,14 @@ class EnsembleTravaux extends StatelessWidget {
                     Text('Tramway: ${travaux.isTramway ?? ''}'),
                     Text('Longitude: ${travaux.long ?? ''}'),
                     Text('Latitude: ${travaux.lat ?? ''}'),
+                    const Divider(), // Ajout d'une ligne de division entre chaque travail
                   ],
-                ),
-              )
-            : const Center(
-                child: CircularProgressIndicator(),
-              );
-      }),
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
