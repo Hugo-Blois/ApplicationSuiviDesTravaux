@@ -20,11 +20,11 @@ class TravauxRepository {
           description: travauxData['description'],
           address: travauxData['address'],
           startAt: travauxData['startat'],
-          endAt: travauxData['endAt'],
+          endAt: travauxData['endat'],
           traffic: travauxData['traffic'],
           contact: travauxData['contact'],
           email: travauxData['email'],
-          isTramway: travauxData['isTramway'],
+          isTramway: travauxData['istramway'],
           long: travauxData["geo_point_2d"]["lon"],
           lat: travauxData["geo_point_2d"]["lat"],
         );
