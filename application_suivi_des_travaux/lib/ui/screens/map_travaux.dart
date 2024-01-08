@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:application_suivi_des_travaux/ui/screens/travaux_details.dart';
+import 'package:application_suivi_des_travaux/ui/screens/ensemble_travaux.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -99,11 +99,11 @@ class _MapTravauxState extends State<MapTravaux> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const TravauxDetails(),
+                    builder: (context) => const EnsembleTravaux(),
                   ),
                 );
               },
-              child: const Text('Voir les travaux'),
+              child: const Text('Voir tous les travaux'),
             ),
           ),
         ],
