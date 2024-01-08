@@ -1,24 +1,27 @@
 import 'dart:convert';
 
-import 'package:application_suivi_des_travaux/work_zone_details_page.dart';
-import 'package:application_suivi_des_travaux/work_zone_list_page.dart';
+import 'package:application_suivi_des_travaux/ui/screens/travaux_details.dart';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
-import 'package:latlong2/latlong.dart';
-import 'work_zone.dart';
+import '../../blocs/travaux_cubit.dart';
+import '../../models/travaux.dart';
 
-class MyMap extends StatefulWidget {
-  const MyMap({super.key});
+
+class MapTravaux extends StatefulWidget {
+  const MapTravaux({super.key});
 
   @override
-  _MyMapState createState() => _MyMapState();
+  // ignore: library_private_types_in_public_api
+  _MapTravauxState createState() => _MapTravauxState();
 }
 
-class _MyMapState extends State<MyMap> {
+class _MapTravauxState extends State<MapTravaux> {
   MapController mapController = MapController();
   List<Marker> markers = [];
-  List<WorkZone> workZones = [];
 
   @override
   void initState() {
@@ -34,27 +37,11 @@ class _MyMapState extends State<MyMap> {
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
 
-      for (var record in data) {
-        WorkZone workZone = WorkZone.fromJson(record);
-        workZones.add(workZone);
-
-        double lat = workZone.location.coordinates[1];
-        double lon = workZone.location.coordinates[0];
-        markers.add(
-          Marker(
-            width: 40.0,
-            height: 40.0,
-            point: LatLng(lat, lon),
-            builder: (ctx) => Container(
-              child: Icon(Icons.work),
-            ),
-          ),
-        );
-      }
-
       setState(() {});
     } else {
-      print('Failed to fetch data: ${response.statusCode}');
+      if (kDebugMode) {
+        print('Failed to fetch data: ${response.statusCode}');
+      }
     }
   }
 
@@ -66,15 +53,6 @@ class _MyMapState extends State<MyMap> {
     mapController.move(mapController.center, mapController.zoom - 1);
   }
 
-  void goToWorkZoneDetails(WorkZone workZone) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WorkZoneDetailsPage(workZone),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +61,6 @@ class _MyMapState extends State<MyMap> {
           FlutterMap(
             mapController: mapController,
             options: MapOptions(
-              center: LatLng(47.47678, -0.56223),
               zoom: 15.0,
             ),
             layers: [
@@ -101,14 +78,14 @@ class _MyMapState extends State<MyMap> {
               children: [
                 FloatingActionButton(
                   onPressed: zoomIn,
-                  child: Icon(Icons.add),
                   mini: true,
+                  child: const Icon(Icons.add),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 FloatingActionButton(
                   onPressed: zoomOut,
-                  child: Icon(Icons.remove),
                   mini: true,
+                  child: const Icon(Icons.remove),
                 ),
               ],
             ),
@@ -122,11 +99,11 @@ class _MyMapState extends State<MyMap> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => WorkZoneListPage(workZones),
+                    builder: (context) => const TravauxDetails(),
                   ),
                 );
               },
-              child: Text('Voir les travaux'),
+              child: const Text('Voir les travaux'),
             ),
           ),
         ],
