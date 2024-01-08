@@ -4,13 +4,11 @@ import 'package:application_suivi_des_travaux/ui/screens/ensemble_travaux.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import '../../blocs/travaux_cubit.dart';
 import '../../models/travaux.dart';
-
 
 class MapTravaux extends StatefulWidget {
   const MapTravaux({super.key});
@@ -46,6 +44,11 @@ class _MapTravauxState extends State<MapTravaux> {
       ),
     );
   }
+
+  Future<void> fetchData() async {
+    final response = await http.get(
+      'https://data.angers.fr/api/explore/v2.1/catalog/datasets/info-travaux/records?limit=20'
+          as Uri,
 
   // Function to show a pop-up when the marker is clicked
   void _showMarkerPopup(BuildContext context) {
@@ -89,7 +92,8 @@ class _MapTravauxState extends State<MapTravaux> {
             ),
             layers: [
               TileLayerOptions(
-                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate:
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: ['a', 'b', 'c'],
               ),
               MarkerLayerOptions(markers: markers),

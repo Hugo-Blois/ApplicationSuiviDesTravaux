@@ -1,38 +1,43 @@
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:application_suivi_des_travaux/models/travaux.dart';
 
 class TravauxRepository {
-  static Future<Travaux> fetchTravaux(int id) async {
-    final Response response = await get(Uri.parse(
-        'https://data.angers.fr/api/explore/v2.1/catalog/datasets/info-travaux/records?where=id%20%3D%2085596'));
+  static Future<List<Travaux>> fetchAllTravaux() async {
+    final response = await http.get(Uri.parse(
+        'https://data.angers.fr/api/explore/v2.1/catalog/datasets/info-travaux/exports/geojson?lang=fr&timezone=Europe%2FBerlin'));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> jsonData = jsonDecode(response.body);
-      final List<dynamic> results = jsonData['results'];
+      final Map<String, dynamic> geoJson = jsonDecode(response.body);
 
-      if (results.isNotEmpty) {
-        final Map<String, dynamic> travauxData = results[0];
+      final List<dynamic> features = geoJson['features'];
+
+      List<Travaux> travauxList = [];
+
+      for (var feature in features) {
+        final properties = feature['properties'];
 
         final Travaux travaux = Travaux(
-          id: travauxData['id'],
-          titre: travauxData['title'],
-          description: travauxData['description'],
-          address: travauxData['address'],
-          startAt: travauxData['startat'],
-          endAt: travauxData['endat'],
-          traffic: travauxData['traffic'],
-          contact: travauxData['contact'],
-          email: travauxData['email'],
-          isTramway: travauxData['istramway'],
-          long: travauxData["geo_point_2d"]["lon"],
-          lat: travauxData["geo_point_2d"]["lat"],
+          id: properties['id'],
+          titre: properties['title'],
+          description: properties['description'],
+          address: properties['address'],
+          startAt: properties['startat'],
+          endAt: properties['endat'],
+          traffic: properties['traffic'],
+          contact: properties['contact'],
+          email: properties['email'],
+          isTramway: properties['istramway'],
+          long: feature['geometry']['coordinates']
+              [0], // GeoJSON uses [longitude, latitude]
+          lat: feature['geometry']['coordinates'][1],
         );
 
-        return travaux;
-      } else {
-        throw Exception('No travaux found');
+        travauxList.add(travaux);
       }
+
+      return travauxList;
     } else {
       throw Exception('Failed to load travaux');
     }

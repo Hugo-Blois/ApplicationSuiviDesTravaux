@@ -3,15 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/travaux.dart';
 
-class TravauxCubit extends Cubit<Travaux> {
-  /// Constructeur + initialisation du Cubit avec un tableau vide d'entreprise
-  TravauxCubit() : super(Travaux());
+class TravauxCubit extends Cubit<List<Travaux>> {
+  /// Constructeur + initialisation du Cubit avec une liste vide de travaux
+  TravauxCubit() : super([]);
 
-  /// Méthode pour charger la liste d'entreprise
+  /// Méthode pour charger la liste de travaux
   Future<void> loadTravaux() async {
     try {
-      final Travaux travaux = await TravauxRepository.fetchTravaux(85596);
-      emit(travaux);
+      final List<Travaux> travauxList =
+          await TravauxRepository.fetchAllTravaux();
+      emit(travauxList);
     } catch (e) {
       print('Erreur lors du chargement des travaux : $e');
     }
