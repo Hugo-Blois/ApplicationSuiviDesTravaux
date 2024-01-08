@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
 import '../../blocs/travaux_cubit.dart';
 import '../../models/travaux.dart';
 
@@ -26,23 +27,45 @@ class _MapTravauxState extends State<MapTravaux> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+    markers.add(
+      Marker(
+        width: 80.0,
+        height: 80.0,
+        point: LatLng(47.49311114 ,  -0.5514251), // Coordinates for the point
+        builder: (ctx) => GestureDetector(
+          onTap: () {
+            // Show a pop-up or navigate to another screen on marker click
+            _showMarkerPopup(ctx);
+          },
+          child: const Icon(
+            Icons.location_on,
+            color: Colors.red, // Customize marker color if needed
+            size: 40.0,
+          ),
+        ),
+      ),
+    );
   }
 
-  Future<void> fetchData() async {
-    final response = await http.get(
-      'https://data.angers.fr/api/explore/v2.1/catalog/datasets/info-travaux/records?limit=20' as Uri,
+  // Function to show a pop-up when the marker is clicked
+  void _showMarkerPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Marker Clicked'),
+          content: const Text('You clicked the marker at 10 boulevard Jean Jeanneteau, Angers.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
-
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
-
-      setState(() {});
-    } else {
-      if (kDebugMode) {
-        print('Failed to fetch data: ${response.statusCode}');
-      }
-    }
   }
 
   void zoomIn() {
@@ -61,7 +84,8 @@ class _MapTravauxState extends State<MapTravaux> {
           FlutterMap(
             mapController: mapController,
             options: MapOptions(
-              zoom: 15.0,
+              center: LatLng(47.4736, -0.5544),
+              zoom: 13.5,
             ),
             layers: [
               TileLayerOptions(
