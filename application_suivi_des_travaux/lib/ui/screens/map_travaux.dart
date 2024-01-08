@@ -1,13 +1,15 @@
 import 'dart:convert';
 
-import 'package:application_suivi_des_travaux/work_zone_details_page.dart';
-import 'package:application_suivi_des_travaux/work_zone_list_page.dart';
+import 'package:application_suivi_des_travaux/ui/screens/travaux_details.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
-import 'package:latlong2/latlong.dart';
-import '../../work_zone.dart';
+import '../../blocs/travaux_cubit.dart';
+import '../../models/travaux.dart';
+
 
 class MapTravaux extends StatefulWidget {
   const MapTravaux({super.key});
@@ -20,7 +22,6 @@ class MapTravaux extends StatefulWidget {
 class _MapTravauxState extends State<MapTravaux> {
   MapController mapController = MapController();
   List<Marker> markers = [];
-  List<WorkZone> workZones = [];
 
   @override
   void initState() {
@@ -35,22 +36,6 @@ class _MapTravauxState extends State<MapTravaux> {
 
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
-
-      for (var record in data) {
-        WorkZone workZone = WorkZone.fromJson(record);
-        workZones.add(workZone);
-
-        double lat = workZone.location.coordinates[1];
-        double lon = workZone.location.coordinates[0];
-        markers.add(
-          Marker(
-            width: 40.0,
-            height: 40.0,
-            point: LatLng(lat, lon),
-            builder: (ctx) => const Icon(Icons.work),
-          ),
-        );
-      }
 
       setState(() {});
     } else {
@@ -68,15 +53,6 @@ class _MapTravauxState extends State<MapTravaux> {
     mapController.move(mapController.center, mapController.zoom - 1);
   }
 
-  void goToWorkZoneDetails(WorkZone workZone) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WorkZoneDetailsPage(workZone),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +61,6 @@ class _MapTravauxState extends State<MapTravaux> {
           FlutterMap(
             mapController: mapController,
             options: MapOptions(
-              center: LatLng(47.47678, -0.56223),
               zoom: 15.0,
             ),
             layers: [
@@ -124,7 +99,7 @@ class _MapTravauxState extends State<MapTravaux> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => WorkZoneListPage(workZones),
+                    builder: (context) => const TravauxDetails(),
                   ),
                 );
               },
