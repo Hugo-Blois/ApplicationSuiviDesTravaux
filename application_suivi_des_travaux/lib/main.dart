@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: AppRouter.routes,
-      initialRoute: AppRouter.travauxDetails,
+      initialRoute: AppRouter.mapTravaux,
     );
   }
 }
