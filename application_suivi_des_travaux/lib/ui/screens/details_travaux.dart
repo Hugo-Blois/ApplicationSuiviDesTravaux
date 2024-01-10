@@ -24,115 +24,178 @@ class DetailsTravaux extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              travaux.titre ?? 'No Title',
+              travaux.titre ?? 'Pas spécifié',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
+            //Description du travaux
             const SizedBox(height: 16),
             const Text(
-              'Description:',
+              'Description : ',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
-              travaux.description ?? 'No Description',
+              travaux.description ?? 'Pas spécifié',
               style: const TextStyle(fontSize: 16),
             ),
+            //Adresse du travaux
             const SizedBox(height: 16),
             const Text(
-              'Adresse:',
+              'Adresse : ',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
-              travaux.address ?? 'No Address',
+              travaux.address ?? 'Pas spécifié',
               style: const TextStyle(fontSize: 16),
             ),
+            //Date du travaux
             const SizedBox(height: 16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.access_time, size: 24),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                // Titre "Date du chantier"
+                const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Débute le :',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
+                    Icon(Icons.date_range, size: 24),
+                    SizedBox(width: 8),
                     Text(
-                      formatDate(travaux.startAt!) ?? 'Not specified',
+                      'Dates du chantier : ',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // Début du chantier
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Débute le : ',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          formatDate(travaux.startAt!) ?? 'Pas spécifié',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // Fin du chantier
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Termine le : ',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          formatDate(travaux.endAt!) ?? 'Pas spécifié',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // Nombre de jours que dure le chantier
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.access_time, size: 24),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Durée : ',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      calculateNumberOfDaysText(travaux.startAt!, travaux.endAt!),
                       style: const TextStyle(fontSize: 16),
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(Icons.access_time, size: 24),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Termine le:',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      formatDate(travaux.endAt!) ?? 'Not specified',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            //Affectation sur le traffic
             const SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Icon(Icons.traffic, size: 24),
                 const SizedBox(width: 8),
+                const Text(
+                  'Traffic : ',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
                 Text(
-                  'Traffic: ${travaux.traffic ?? 'Not specified'}',
+                  travaux.traffic == 'slow'
+                      ? 'Traffic Ralenti'
+                      : travaux.traffic == 'deviated'
+                      ? 'Route barrée - Déviation'
+                      : 'Pas spéficié',
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
             ),
+            //Contact si problème
             const SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Icon(Icons.contact_phone, size: 24),
                 const SizedBox(width: 8),
+                const Text(
+                  'Contact : ',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
                 Text(
-                  'Contact: ${travaux.contact ?? 'Not specified'}',
+                  travaux.contact ?? 'Pas spécifié',
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
             ),
+            //Email de contact
             const SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Icon(Icons.email, size: 24),
                 const SizedBox(width: 8),
+                const Text(
+                  'Email : ',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
                 Text(
-                  'Email: ${travaux.email ?? 'Not specified'}',
+                  travaux.email ?? 'Pas spécifié',
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
             ),
+            //Affectation Tarmway
             const SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Icon(Icons.train, size: 24),
                 const SizedBox(width: 8),
+                const Text(
+                  'Tramway affecté : ',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
                 Text(
-                  'Is tramway: ${travaux.isTramway ?? 'Not specified'}',
+                  travaux.isTramway == 1 ? 'Oui' : 'Non',
                   style: const TextStyle(fontSize: 16),
                 ),
               ],
@@ -152,6 +215,23 @@ class DetailsTravaux extends StatelessWidget {
     final year = dateTime.year.toString();
 
     return '$day ${getMonthName(month)} $year';
+  }
+
+  int calculateNumberOfDays(String start, String end) {
+    DateTime startDate = DateTime.parse(start);
+    DateTime endDate = DateTime.parse(end);
+    Duration difference = endDate.difference(startDate);
+    return difference.inDays+1;
+  }
+
+  String calculateNumberOfDaysText(String start, String end) {
+    int numberOfDays = calculateNumberOfDays(start, end);
+
+    if (numberOfDays == 1) {
+      return '$numberOfDays jour';
+    } else {
+      return '$numberOfDays jours';
+    }
   }
 
   String getMonthName(String month) {
