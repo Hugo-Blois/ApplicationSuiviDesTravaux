@@ -1,15 +1,11 @@
-import 'dart:convert';
 
 import 'package:application_suivi_des_travaux/router.dart';
-import 'package:application_suivi_des_travaux/ui/screens/details_travaux.dart';
 import 'package:application_suivi_des_travaux/ui/screens/ensemble_travaux.dart';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-import '../../blocs/travaux_cubit.dart';
 import '../../models/travaux.dart';
 import '../../repositories/travaux_repository.dart';
 
@@ -63,21 +59,34 @@ class _MapTravauxState extends State<MapTravaux> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(travaux.titre ?? 'No title'),
-          content: Text(travaux.description ?? 'No description'),
+          title: Text(
+            travaux.titre ?? 'No title',
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            travaux.description ?? 'No description',
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 18),
+          ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the current pop-up
-                _navigateToDetailTravaux(context, travaux);
-              },
-              child: Text('Voir le détail'),
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Ferme la fenêtre contextuelle actuelle
+                    _navigateToDetailTravaux(context, travaux);
+                  },
+                  child: const Text('Voir le détail'),
+                ),
+              ],
             ),
           ],
         );

@@ -25,29 +25,30 @@ class DetailsTravaux extends StatelessWidget {
           children: [
             Text(
               travaux.titre ?? 'Pas spécifié',
+              textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             //Description du travaux
             const SizedBox(height: 16),
             const Text(
               'Description : ',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
               travaux.description ?? 'Pas spécifié',
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 18),
             ),
             //Adresse du travaux
             const SizedBox(height: 16),
             const Text(
               'Adresse : ',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
               travaux.address ?? 'Pas spécifié',
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 18),
             ),
             //Date du travaux
             const SizedBox(height: 16),
@@ -62,7 +63,7 @@ class DetailsTravaux extends StatelessWidget {
                     SizedBox(width: 8),
                     Text(
                       'Dates du chantier : ',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -81,7 +82,7 @@ class DetailsTravaux extends StatelessWidget {
                         ),
                         Text(
                           formatDate(travaux.startAt!) ?? 'Pas spécifié',
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
@@ -102,7 +103,7 @@ class DetailsTravaux extends StatelessWidget {
                         ),
                         Text(
                           formatDate(travaux.endAt!) ?? 'Pas spécifié',
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
@@ -117,12 +118,12 @@ class DetailsTravaux extends StatelessWidget {
                     const SizedBox(width: 8),
                     const Text(
                       'Durée : ',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       calculateNumberOfDaysText(travaux.startAt!, travaux.endAt!),
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 18),
                     ),
                   ],
                 ),
@@ -137,7 +138,7 @@ class DetailsTravaux extends StatelessWidget {
                 const SizedBox(width: 8),
                 const Text(
                   'Traffic : ',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   travaux.traffic == 'slow'
@@ -145,7 +146,7 @@ class DetailsTravaux extends StatelessWidget {
                       : travaux.traffic == 'deviated'
                       ? 'Route barrée - Déviation'
                       : 'Pas spéficié',
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 18),
                 ),
               ],
             ),
@@ -158,11 +159,11 @@ class DetailsTravaux extends StatelessWidget {
                 const SizedBox(width: 8),
                 const Text(
                   'Contact : ',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   travaux.contact ?? 'Pas spécifié',
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 18),
                 ),
               ],
             ),
@@ -175,11 +176,11 @@ class DetailsTravaux extends StatelessWidget {
                 const SizedBox(width: 8),
                 const Text(
                   'Email : ',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   travaux.email ?? 'Pas spécifié',
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 18),
                 ),
               ],
             ),
@@ -192,11 +193,11 @@ class DetailsTravaux extends StatelessWidget {
                 const SizedBox(width: 8),
                 const Text(
                   'Tramway affecté : ',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   travaux.isTramway == 1 ? 'Oui' : 'Non',
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 18),
                 ),
               ],
             ),
