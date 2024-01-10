@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:application_suivi_des_travaux/models/travaux.dart';
 

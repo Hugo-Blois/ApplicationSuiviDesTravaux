@@ -9,12 +9,9 @@ class TravauxCubit extends Cubit<List<Travaux>> {
 
   /// Méthode pour charger la liste de travaux
   Future<void> loadTravaux() async {
-    try {
       final List<Travaux> travauxList =
           await TravauxRepository.fetchAllTravaux();
       emit(travauxList);
-    } catch (e) {
-      print('Erreur lors du chargement des travaux : $e');
-    }
+
   }
 }

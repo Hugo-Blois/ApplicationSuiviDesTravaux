@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:application_suivi_des_travaux/blocs/travaux_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:application_suivi_des_travaux/models/travaux.dart';
-import 'package:intl/intl.dart';
 
 class DetailsTravaux extends StatelessWidget {
 
@@ -81,7 +78,7 @@ class DetailsTravaux extends StatelessWidget {
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          formatDate(travaux.startAt!) ?? 'Pas spécifié',
+                          formatDate(travaux.startAt!),
                           style: const TextStyle(fontSize: 18),
                         ),
                       ],
@@ -102,7 +99,7 @@ class DetailsTravaux extends StatelessWidget {
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          formatDate(travaux.endAt!) ?? 'Pas spécifié',
+                          formatDate(travaux.endAt!),
                           style: const TextStyle(fontSize: 18),
                         ),
                       ],
