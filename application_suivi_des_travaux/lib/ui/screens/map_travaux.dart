@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:application_suivi_des_travaux/router.dart';
+import 'package:application_suivi_des_travaux/ui/screens/details_travaux.dart';
 import 'package:application_suivi_des_travaux/ui/screens/ensemble_travaux.dart';
 
 import 'package:flutter/foundation.dart';
@@ -9,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import '../../blocs/travaux_cubit.dart';
 import '../../models/travaux.dart';
+import '../../repositories/travaux_repository.dart';
 
 class MapTravaux extends StatefulWidget {
   const MapTravaux({super.key});
@@ -25,34 +28,43 @@ class _MapTravauxState extends State<MapTravaux> {
   @override
   void initState() {
     super.initState();
-    markers.add(
-      Marker(
-        width: 80.0,
-        height: 80.0,
-        point: LatLng(47.49311114 ,  -0.5514251), // Coordinates for the point
-        builder: (ctx) => GestureDetector(
-          onTap: () {
-            // Show a pop-up or navigate to another screen on marker click
-            _showMarkerPopup(ctx);
-          },
-          child: const Icon(
-            Icons.location_on,
-            color: Colors.red, // Customize marker color if needed
-            size: 40.0,
+    // Call the repository method to fetch travaux
+    TravauxRepository.fetchAllTravaux().then((List<Travaux> travauxList) {
+      // Add markers for each travaux
+      for (Travaux travaux in travauxList) {
+        markers.add(
+          Marker(
+            width: 80.0,
+            height: 80.0,
+            point: LatLng(travaux.lat ?? 0.0, travaux.long ?? 0.0), // Coordinates for each travaux
+            builder: (ctx) => GestureDetector(
+              onTap: () {
+                // Show a pop-up or navigate to another screen on marker click
+                _showMarkerPopup(ctx, travaux);
+              },
+              child: const Icon(
+                Icons.location_on,
+                color: Colors.red, // Customize marker color if needed
+                size: 40.0,
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        );
+      }
+
+      // Make sure to update the UI after adding markers
+      setState(() {});
+    });
   }
 
   // Function to show a pop-up when the marker is clicked
-  void _showMarkerPopup(BuildContext context) {
+  void _showMarkerPopup(BuildContext context, Travaux travaux) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Marker Clicked'),
-          content: const Text('You clicked the marker at 10 boulevard Jean Jeanneteau, Angers.'),
+          title: Text(travaux.titre ?? 'No title'),
+          content: Text(travaux.description ?? 'No description'),
           actions: [
             TextButton(
               onPressed: () {
@@ -60,10 +72,21 @@ class _MapTravauxState extends State<MapTravaux> {
               },
               child: const Text('OK'),
             ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the current pop-up
+                _navigateToDetailTravaux(context, travaux);
+              },
+              child: Text('Voir le détail'),
+            ),
           ],
         );
       },
     );
+  }
+
+  void _navigateToDetailTravaux(BuildContext context, Travaux travaux) {
+    Navigator.of(context).pushNamed(AppRouter.detailTravaux, arguments: travaux);
   }
 
   void zoomIn() {
