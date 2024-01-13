@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:application_suivi_des_travaux/router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -53,6 +54,11 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
         }).toList();
       });
     });
+  }
+
+  void _navigateToDetailTravaux(BuildContext context, Travaux travaux) {
+    Navigator.of(context)
+        .pushNamed(AppRouter.detailTravaux, arguments: travaux);
   }
 
   @override
@@ -175,7 +181,7 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 16.0, bottom: 16.0),
+                      padding: const EdgeInsets.only(left: 16.0),
                       child: RichText(
                         text: TextSpan(
                           children: [
@@ -186,6 +192,16 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
                             TextSpan(text: formatDate(travaux.endAt ?? '')),
                           ],
                         ),
+                      ),
+                    ),
+                    ListTile(
+                      // Ajout du bouton pour voir les détails
+                      trailing: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          _navigateToDetailTravaux(context, travaux);
+                        },
+                        child: const Text('Voir le détail'),
                       ),
                     ),
                     const Divider(),
