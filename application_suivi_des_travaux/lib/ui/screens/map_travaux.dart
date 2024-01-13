@@ -1,11 +1,12 @@
-import 'dart:convert';
 
+import 'package:application_suivi_des_travaux/router.dart';
 import 'package:application_suivi_des_travaux/ui/screens/ensemble_travaux.dart';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
+import '../../models/travaux.dart';
+import '../../repositories/travaux_repository.dart';
 
 class MapTravaux extends StatefulWidget {
   const MapTravaux({super.key});
@@ -22,24 +23,78 @@ class _MapTravauxState extends State<MapTravaux> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+    // Call the repository method to fetch travaux
+    TravauxRepository.fetchAllTravaux().then((List<Travaux> travauxList) {
+      // Add markers for each travaux
+      for (Travaux travaux in travauxList) {
+        markers.add(
+          Marker(
+            width: 80.0,
+            height: 80.0,
+            point: LatLng(travaux.lat ?? 0.0, travaux.long ?? 0.0), // Coordinates for each travaux
+            builder: (ctx) => GestureDetector(
+              onTap: () {
+                // Show a pop-up or navigate to another screen on marker click
+                _showMarkerPopup(ctx, travaux);
+              },
+              child: const Icon(
+                Icons.location_on,
+                color: Colors.red, // Customize marker color if needed
+                size: 40.0,
+              ),
+            ),
+          ),
+        );
+      }
+
+      // Make sure to update the UI after adding markers
+      setState(() {});
+    });
   }
 
-  Future<void> fetchData() async {
-    final response = await http.get(
-      'https://data.angers.fr/api/explore/v2.1/catalog/datasets/info-travaux/records?limit=20'
-          as Uri,
+  // Function to show a pop-up when the marker is clicked
+  void _showMarkerPopup(BuildContext context, Travaux travaux) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            travaux.titre ?? 'No title',
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            travaux.description ?? 'No description',
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 18),
+          ),
+          actions: [
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Ferme la fenêtre contextuelle actuelle
+                    _navigateToDetailTravaux(context, travaux);
+                  },
+                  child: const Text('Voir le détail'),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
+  }
 
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
-
-      setState(() {});
-    } else {
-      if (kDebugMode) {
-        print('Failed to fetch data: ${response.statusCode}');
-      }
-    }
+  void _navigateToDetailTravaux(BuildContext context, Travaux travaux) {
+    Navigator.of(context).pushNamed(AppRouter.detailTravaux, arguments: travaux);
   }
 
   void zoomIn() {
@@ -58,7 +113,8 @@ class _MapTravauxState extends State<MapTravaux> {
           FlutterMap(
             mapController: mapController,
             options: MapOptions(
-              zoom: 15.0,
+              center: LatLng(47.4736, -0.5544),
+              zoom: 13.5,
             ),
             layers: [
               TileLayerOptions(
