@@ -18,6 +18,7 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
   List<Travaux> _filteredTravaux = [];
   final TextEditingController _controller = TextEditingController();
   Timer? _debounce;
+  String _selectedSearchType = 'Adresse';
 
   @override
   void initState() {
@@ -34,11 +35,22 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       setState(() {
-        _filteredTravaux = _travaux
-            .where((travaux) =>
-                travaux.address?.toLowerCase().contains(value.toLowerCase()) ??
-                false)
-            .toList();
+        _filteredTravaux = _travaux.where((travaux) {
+          final String lowerCaseValue = value.toLowerCase();
+          if (_selectedSearchType == 'Adresse') {
+            return travaux.address?.toLowerCase().contains(lowerCaseValue) ??
+                false;
+          } else if (_selectedSearchType == 'Titre') {
+            return travaux.titre?.toLowerCase().contains(lowerCaseValue) ??
+                false;
+          } else if (_selectedSearchType == 'Description') {
+            return travaux.description
+                    ?.toLowerCase()
+                    .contains(lowerCaseValue) ??
+                false;
+          }
+          return false;
+        }).toList();
       });
     });
   }
@@ -47,20 +59,51 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Détails des travaux :'),
+        title: const Text('Recherche des travaux :'),
       ),
       body: Column(
         children: [
           Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: TextField(
-                controller: _controller,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  labelText: 'Rechercher des travaux par adresse',
+            padding: const EdgeInsets.all(16.0), // Ajout de padding
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(right: 15.0), // Ajout de padding
+                    child: TextField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        labelText: 'Rechercher des travaux',
+                      ),
+                      onChanged: _onTravauxChanged,
+                    ),
+                  ),
                 ),
-                onChanged: _onTravauxChanged,
-              )),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0), // Ajout de padding
+                  child: DropdownButton<String>(
+                    value: _selectedSearchType,
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          _selectedSearchType = newValue;
+                        });
+                      }
+                    },
+                    items: <String>['Adresse', 'Titre', 'Description']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: _filteredTravaux.length,
