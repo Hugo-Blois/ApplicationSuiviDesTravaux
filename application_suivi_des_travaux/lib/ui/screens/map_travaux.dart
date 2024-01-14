@@ -158,12 +158,7 @@ class _MapTravauxState extends State<MapTravaux> {
             child: ElevatedButton(
               onPressed: () {
                 // Naviguer vers la page des détails des travaux
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EnsembleTravaux(),
-                  ),
-                );
+                Navigator.of(context).push(_createRoute());
               },
               child: const Text('Voir tous les travaux'),
             ),
@@ -172,4 +167,23 @@ class _MapTravauxState extends State<MapTravaux> {
       ),
     );
   }
+}
+
+// Ajoutez cette fonction à votre code pour créer la transition
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => const EnsembleTravaux(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
