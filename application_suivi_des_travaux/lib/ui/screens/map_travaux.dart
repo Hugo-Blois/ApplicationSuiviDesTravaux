@@ -54,42 +54,50 @@ class _MapTravauxState extends State<MapTravaux> {
 
   // Function to show a pop-up when the marker is clicked
   void _showMarkerPopup(BuildContext context, Travaux travaux) {
-    showDialog(
+    showGeneralDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            travaux.titre ?? 'No title',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          content: Text(
-            travaux.description ?? 'No description',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 18),
-          ),
-          actions: [
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'),
-                ),
-                const Spacer(),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Ferme la fenêtre contextuelle actuelle
-                    _navigateToDetailTravaux(context, travaux);
-                  },
-                  child: const Text('Voir le détail'),
-                ),
-              ],
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, a1, a2, child) {
+        var curve = Curves.easeInOut.transform(a1.value);
+        return Transform.scale(
+          scale: curve,
+          child: AlertDialog(
+            title: Text(
+              travaux.titre ?? 'No title',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-          ],
+            content: Text(
+              travaux.description ?? 'No description',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 18),
+            ),
+            actions: [
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Ferme la fenêtre contextuelle actuelle
+                      _navigateToDetailTravaux(context, travaux);
+                    },
+                    child: const Text('Voir le détail'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
       },
+      transitionDuration: const Duration(milliseconds: 300),
     );
   }
 
