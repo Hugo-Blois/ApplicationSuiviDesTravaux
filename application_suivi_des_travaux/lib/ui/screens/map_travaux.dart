@@ -11,48 +11,79 @@ class MapTravaux extends StatefulWidget {
   const MapTravaux({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _MapTravauxState createState() => _MapTravauxState();
 }
 
 class _MapTravauxState extends State<MapTravaux> {
   MapController mapController = MapController();
   List<Marker> markers = [];
+  DateTime currentDate = DateTime.now();
+  List<Travaux> allTravaux = [];
+  bool showAllTravaux = false;
 
   @override
   void initState() {
     super.initState();
-    // Call the repository method to fetch travaux
     TravauxRepository.fetchAllTravaux().then((List<Travaux> travauxList) {
-      // Add markers for each travaux
-      for (Travaux travaux in travauxList) {
-        markers.add(
-          Marker(
-            width: 80.0,
-            height: 80.0,
-            point: LatLng(travaux.lat ?? 0.0, travaux.long ?? 0.0),
-            // Coordinates for each travaux
-            builder: (ctx) => GestureDetector(
-              onTap: () {
-                // Show a pop-up or navigate to another screen on marker click
-                _showMarkerPopup(ctx, travaux);
-              },
-              child: const Icon(
-                Icons.location_on,
-                color: Colors.redAccent, // Customize marker color if needed
-                size: 40.0,
-              ),
-            ),
-          ),
-        );
-      }
-
-      // Make sure to update the UI after adding markers
-      setState(() {});
+      allTravaux = travauxList;
+      updateMarkers(allTravaux);
     });
   }
 
-  // Function to show a pop-up when the marker is clicked
+  void updateMarkers(List<Travaux> travauxList) {
+    markers.clear();
+    for (Travaux travaux in travauxList) {
+      markers.add(
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: LatLng(travaux.lat ?? 0.0, travaux.long ?? 0.0),
+          builder: (ctx) => GestureDetector(
+            onTap: () {
+              _showMarkerPopup(ctx, travaux);
+            },
+            child: const Icon(
+              Icons.location_on,
+              color: Colors.redAccent,
+              size: 40.0,
+            ),
+          ),
+        ),
+      );
+    }
+    setState(() {});
+  }
+
+  void filterOrShowAllTravaux() {
+    if (showAllTravaux) {
+      TravauxRepository.fetchAllTravaux().then((List<Travaux> travauxList) {
+        allTravaux = travauxList;
+        updateMarkers(allTravaux);
+      });
+    } else {
+      filterTravauxFromDate();
+    }
+
+    setState(() {
+      showAllTravaux = !showAllTravaux;
+    });
+  }
+
+  void filterTravauxFromDate() {
+    List<Travaux> filteredTravaux = allTravaux
+        .where((travaux) {
+      if (travaux.endAt != null) {
+        // Assuming the date format is 'yyyy-MM-dd'
+        DateTime endDate = DateTime.parse(travaux.endAt!);
+        return endDate.isAfter(currentDate);
+      } else {
+        return false;
+      }
+    })
+        .toList();
+    updateMarkers(filteredTravaux);
+  }
+
   void _showMarkerPopup(BuildContext context, Travaux travaux) {
     showGeneralDialog(
       context: context,
@@ -87,7 +118,7 @@ class _MapTravauxState extends State<MapTravaux> {
                   TextButton(
                     onPressed: () {
                       Navigator.of(context)
-                          .pop(); // Ferme la fenêtre contextuelle actuelle
+                          .pop();
                       _navigateToDetailTravaux(context, travaux);
                     },
                     child: const Text('Voir le détail'),
@@ -128,6 +159,67 @@ class _MapTravauxState extends State<MapTravaux> {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
         ),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu, color: Colors.white),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.lightGreen[800],
+              ),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Description du Projet",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    "Bienvenue dans l'application de suivi des travaux d'Angers.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    "Cette application vous permet de visualiser les travaux terminés et en cours mais aussi d'obtenir des informations détaillées sur chaque chantier.",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
       body: Stack(
         children: [
@@ -140,14 +232,46 @@ class _MapTravauxState extends State<MapTravaux> {
             layers: [
               TileLayerOptions(
                 urlTemplate:
-                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: ['a', 'b', 'c'],
               ),
               MarkerLayerOptions(markers: markers),
             ],
           ),
           Positioned(
-            top: 100,
+            top: 16,
+            right: 16,
+            child: ElevatedButton(
+              onPressed: filterOrShowAllTravaux,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightGreen[800],
+              ),
+              child: Text(
+                showAllTravaux
+                    ? 'Voir tous les travaux'
+                    : 'Afficher les travaux à partir d\'aujourd\'hui',
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 16,
+            left: 16,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(_createRoute());
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightGreen[800],
+              ),
+              child: const Text(
+                'Voir la liste des travaux',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 100,
             right: 16,
             child: Column(
               children: [
@@ -165,30 +289,12 @@ class _MapTravauxState extends State<MapTravaux> {
               ],
             ),
           ),
-          Positioned(
-            bottom: 16,
-            left: 16,
-            child: ElevatedButton(
-              onPressed: () {
-                // Naviguer vers la page des détails des travaux
-                Navigator.of(context).push(_createRoute());
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.lightGreen[800], // Couleur du fond du bouton en vert
-              ),
-              child: const Text(
-                'Voir tous les travaux',
-                style: TextStyle(color: Colors.white), // Couleur du texte en blanc
-              ),
-            ),
-          ),
         ],
       ),
     );
   }
 }
 
-// Ajoutez cette fonction à votre code pour créer la transition
 Route _createRoute() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
