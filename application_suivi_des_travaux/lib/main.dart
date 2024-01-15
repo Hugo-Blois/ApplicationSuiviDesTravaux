@@ -1,5 +1,7 @@
+import 'package:application_suivi_des_travaux/repositories/preferences_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'blocs/notes_cubit.dart';
 import 'blocs/travaux_cubit.dart';
 import 'router.dart';
 
@@ -9,12 +11,17 @@ void main() {
 
   // Instanciation du Cubit
   final TravauxCubit travauxCubit = TravauxCubit();
+  final NotesCubit noteCubit = NotesCubit(PreferencesRepository());
 
   // Chargement des entreprises
   travauxCubit.loadTravaux();
+  noteCubit.loadNotes();
 
-  runApp(BlocProvider<TravauxCubit>(
-    create: (_) => travauxCubit,
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<TravauxCubit>(create: (_) => travauxCubit),
+      BlocProvider<NotesCubit>(create: (_) => noteCubit),
+    ],
     child: const MyApp(),
   ));
 }
