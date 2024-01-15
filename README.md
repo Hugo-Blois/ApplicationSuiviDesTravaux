@@ -37,7 +37,7 @@ En haut à gauche se trouve l'ébauche d'une barre de navigation dans laquelle n
 À partir de la carte ou de la page affichant tous les travaux, il est possible d'afficher les détails d'un chantier en particulier en appuyant sur le "Voir le détail" de la pop-up de la carte ou de la page affichant tous l'ensemble des travaux.
 
 
-## Developpeur
+## Développeur
 Les packages suivants ont été importés au projet :
 - flutter_map
 - latlong2
