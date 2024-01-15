@@ -5,7 +5,7 @@ API : https://data.angers.fr/explore/dataset/info-travaux/information/
 C'est l'API de data.angers, open-source que nous utilisons pour le projet.
 
 ## Version
-flutter : 3.13.9
+flutter : 3.13.9 /
 dart : 3.1.5
 
 ## Table des matières
