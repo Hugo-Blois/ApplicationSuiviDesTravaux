@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:application_suivi_des_travaux/models/travaux.dart';
 
-class DetailsTravaux extends StatelessWidget {
-  const DetailsTravaux({super.key});
+class DetailsTravaux extends StatefulWidget {
+  const DetailsTravaux({Key? key}) : super(key: key);
+
+  @override
+  _DetailsTravauxState createState() => _DetailsTravauxState();
+}
+
+class _DetailsTravauxState extends State<DetailsTravaux> {
+  final TextEditingController _textFieldController = TextEditingController();
+  String _selectedState = '';
+  late Travaux travaux;
+
+  @override
+  void initState() {
+    super.initState();
+    // Vous pouvez déplacer le code de récupération ici si nécessaire
+  }
 
   @override
   Widget build(BuildContext context) {
     // Récupérer les arguments depuis la route
-    Travaux travaux = ModalRoute.of(context)!.settings.arguments as Travaux;
+    travaux = ModalRoute.of(context)!.settings.arguments as Travaux;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Détails du Travaux'),
+        title: const Text('Détails du Chantier'),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -218,6 +233,43 @@ class DetailsTravaux extends StatelessWidget {
                   Text(
                     travaux.isTramway == 1 ? 'Oui' : 'Non',
                     style: const TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+              // Notes du chantier.
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Notes : ',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: _textFieldController,
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                        hintText: 'Ajouter des notes sur le travail...',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  DropdownButton<String>(
+                    value: _selectedState,
+                    items: <String>['', 'En cours', 'Fini']
+                        .map((String value) => DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            ))
+                        .toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedState = newValue!;
+                      });
+                    },
                   ),
                 ],
               ),

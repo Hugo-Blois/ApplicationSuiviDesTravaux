@@ -19,7 +19,16 @@ class PreferencesRepository {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String> existingNotes = prefs.getStringList('notes') ?? [];
 
-    existingNotes.add(jsonEncode(note.toJson()));
+    final index = existingNotes.indexWhere((jsonNote) {
+      final savedNote = Note.fromJson(jsonDecode(jsonNote));
+      return savedNote.id == note.id;
+    });
+
+    if (index != -1) {
+      existingNotes[index] = jsonEncode(note.toJson());
+    } else {
+      existingNotes.add(jsonEncode(note.toJson()));
+    }
 
     prefs.setStringList('notes', existingNotes);
   }
