@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:application_suivi_des_travaux/models/notes.dart';
 import 'package:application_suivi_des_travaux/models/travaux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
