@@ -131,9 +131,9 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
                           children: [
                             const TextSpan(
                               text: 'Titre: ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                             ),
-                            TextSpan(text: travaux.titre ?? ''),
+                            TextSpan(text: travaux.titre ?? '', style: const TextStyle(color: Colors.black)),
                           ],
                         ),
                       ),
@@ -145,9 +145,9 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
                           children: [
                             const TextSpan(
                               text: 'Description : ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                             ),
-                            TextSpan(text: travaux.description ?? ''),
+                            TextSpan(text: travaux.description ?? '', style: const TextStyle(color: Colors.black)),
                           ],
                         ),
                       ),
@@ -159,9 +159,9 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
                           children: [
                             const TextSpan(
                               text: 'Address : ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                             ),
-                            TextSpan(text: travaux.address ?? ''),
+                            TextSpan(text: travaux.address ?? '', style: const TextStyle(color: Colors.black)),
                           ],
                         ),
                       ),
@@ -173,9 +173,9 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
                           children: [
                             const TextSpan(
                               text: 'Date de début : ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                             ),
-                            TextSpan(text: formatDate(travaux.startAt ?? '')),
+                            TextSpan(text: formatDate(travaux.startAt ?? ''), style: const TextStyle(color: Colors.black)),
                           ],
                         ),
                       ),
@@ -187,9 +187,9 @@ class _EnsembleTravauxState extends State<EnsembleTravaux> {
                           children: [
                             const TextSpan(
                               text: 'Date de fin : ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                             ),
-                            TextSpan(text: formatDate(travaux.endAt ?? '')),
+                            TextSpan(text: formatDate(travaux.endAt ?? ''), style: const TextStyle(color: Colors.black)),
                           ],
                         ),
                       ),
