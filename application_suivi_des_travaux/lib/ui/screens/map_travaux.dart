@@ -198,6 +198,7 @@ class _MapTravauxState extends State<MapTravaux> {
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
                     "Bienvenue dans l'application de suivi des travaux d'Angers.",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16.0,
