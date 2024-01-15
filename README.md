@@ -16,19 +16,19 @@ dart : 3.1.5
 - [TODO](#todo)
 
 ## Installation
-git clone https://github.com/Hugo-Blois/ApplicationSuiviDesTravaux.git
+git clone https://github.com/Hugo-Blois/ApplicationSuiviDesTravaux.git  
 cd Application_suivi_des_travaux
 
 ## Fonctionnalités
 
 ## Visualisation 
-La page d'accueil permet de visualiser l'ensemble des travaux qui ont été réalisés ou en cours de réalisation sur Angers. Les travaux sont marqués d'un symbole GPS rouge cliquable.
+La page d'accueil permet de visualiser l'ensemble des travaux qui ont été réalisés ou en cours de réalisation sur Angers.  Les travaux sont marqués d'un symbole GPS rouge cliquable.
 
 ## Visualisation des travaux actuels
-Il est possible d'afficher seulement les travaux en cours avec le bouton en haut à droite "Afficher les travaux à partir d'aujourd'hui". La map se met ensuite à jour et les travaux en cours sont affcihés sur la map.
+Il est possible d'afficher seulement les travaux en cours avec le bouton en haut à droite "Afficher les travaux à partir d'aujourd'hui".  La map se met ensuite à jour et les travaux en cours sont affcihés sur la map.
 
 ## Chercher un chantier
-Le bouton situé en bas à gauche, "Voir la liste des travaux", renvoie sur une page affichant l'ensemble des travaux en texte brut. Il est ensuite possible de réaliser des recherches sur l'ensemble des travaux avec la barre de recherche située en haut. La recherche peut s'effectuer par titre, par adresse et par description.
+Le bouton situé en bas à gauche, "Voir la liste des travaux", renvoie sur une page affichant l'ensemble des travaux en texte brut.  Il est ensuite possible de réaliser des recherches sur l'ensemble des travaux avec la barre de recherche située en haut.  La recherche peut s'effectuer par titre, par adresse et par description.
 
 ## NavBar infos
 En haut à gauche se trouve l'ébauche d'une barre de navigation dans laquelle nous trouvons quelques infos sur l'application.
