@@ -38,6 +38,8 @@ En haut à gauche se trouve l'ébauche d'une barre de navigation dans laquelle n
 
 
 ## Développeur
+
+## Package
 Les packages suivants ont été importés au projet :
 - flutter_map
 - latlong2
