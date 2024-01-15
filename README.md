@@ -44,7 +44,7 @@ Les packages suivants ont été importés au projet :
 - intl
 
 ## TODO
-La base de données est fonctionnelle (Shared preferences). Une ébauche de formulaire a été développée mais ne fonctionne pas encore.
+Une fonctionnalité permettant d'afficher des remarques de l'utilisateur sur un chantier voulu est en cours de développement. La base de données (Shared preferences) est fonctionnelle et une ébauche de formulaire a été développée mais ne fonctionne pas encore.
 
 ## Théo Sueur
 Etudiant ingénieur logiciel à l'ESEO
