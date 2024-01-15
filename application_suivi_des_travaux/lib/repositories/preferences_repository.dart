@@ -1,29 +1,62 @@
 import 'dart:convert';
 
-import 'package:application_suivi_des_travaux/models/notes.dart';
-import 'package:application_suivi_des_travaux/models/travaux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/note.dart';
+
 class PreferencesRepository {
-  Future<void> saveNotes(List<Notes> notes) async {
+  Future<void> saveNotes(List<Note> notes) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String> listJson = [];
 
-    // for (final Travaux company in companies) {
-    //   listJson.add(jsonEncode(company.toJson()));
-    // }
-    // prefs.setStringList('companies', listJson);
+    for (final Note note in notes) {
+      listJson.add(jsonEncode(note.toJson()));
+    }
+    prefs.setStringList('notes', listJson);
   }
 
-  Future<List<Notes>> loadNotes(Travaux travaux) async {
+  Future<void> saveNote(Note note) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final List<Notes> companies = [];
+    final List<String> existingNotes = prefs.getStringList('notes') ?? [];
 
-    // final listJson = prefs.getStringList('companies') ?? [];
-    // for (final String json in listJson) {
-    //   companies.add(Company.fromJson(jsonDecode(json)));
-    // }
+    final index = existingNotes.indexWhere((jsonNote) {
+      final savedNote = Note.fromJson(jsonDecode(jsonNote));
+      return savedNote.id == note.id;
+    });
 
-    return companies;
+    if (index != -1) {
+      existingNotes[index] = jsonEncode(note.toJson());
+    } else {
+      existingNotes.add(jsonEncode(note.toJson()));
+    }
+
+    prefs.setStringList('notes', existingNotes);
+  }
+
+  Future<Note?> loadNote(int id) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    Note? note;
+
+    final listJson = prefs.getStringList('notes') ?? [];
+    for (final String json in listJson) {
+      note = Note.fromJson(jsonDecode(json));
+      if (note.id == id) {
+        return note;
+      }
+    }
+    return null;
+  }
+
+  Future<List<Note>> loadAllNotes() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final List<Note> notes = [];
+
+    final listJson = prefs.getStringList('notes') ?? [];
+    for (final String json in listJson) {
+      final note = Note.fromJson(jsonDecode(json));
+      notes.add(note);
+    }
+
+    return notes;
   }
 }
