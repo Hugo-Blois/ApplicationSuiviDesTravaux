@@ -92,8 +92,9 @@ class _MapTravauxState extends State<MapTravaux> {
       pageBuilder: (ctx, a1, a2) {
         return BlocBuilder<NotesCubit, NotesState>(
           builder: (context, notesState) {
-            Note correspondingNote = notesState.notes
-                .firstWhere((note) => note.id == travaux.id, orElse: null);
+            Note? correspondingNote = notesState.notes.firstWhere(
+                (note) => note?.id == travaux.id,
+                orElse: (() => null));
 
             return AlertDialog(
               title: Text(
@@ -109,11 +110,11 @@ class _MapTravauxState extends State<MapTravaux> {
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 10),
-                    Text(
-                      correspondingNote.notes ?? 'Aucune Remarque',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 18),
-                    )
+                  Text(
+                    correspondingNote?.notes ?? 'Aucune Remarque',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 18),
+                  )
                 ],
               ),
               actions: [

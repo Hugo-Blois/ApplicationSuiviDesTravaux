@@ -8,7 +8,7 @@ class NotesCubit extends Cubit<NotesState> {
   final PreferencesRepository preferencesRepository;
 
   /// Constructeur + initialisation du Cubit avec une liste de notes
-  NotesCubit(this.preferencesRepository) : super([] as NotesState);
+  NotesCubit(this.preferencesRepository) : super(NotesState([], null));
 
   /// Méthode pour charger la liste de travaux
   Future<void> loadNotes() async {

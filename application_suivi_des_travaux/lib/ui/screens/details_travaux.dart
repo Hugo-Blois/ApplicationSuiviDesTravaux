@@ -13,7 +13,6 @@ class DetailsTravaux extends StatefulWidget {
 
 class _DetailsTravauxState extends State<DetailsTravaux> {
   final TextEditingController _remarqueController = TextEditingController();
-  String _selectedState = '';
   late Travaux travaux;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -267,7 +266,7 @@ class _DetailsTravauxState extends State<DetailsTravaux> {
                           hintText: 'Ajouter des notes sur le travail...',
                         ),
                         validator: (value) {
-                          if(value == null || value.isEmpty){
+                          if (value == null || value.isEmpty) {
                             return 'Veuillez rentrer une remarque';
                           }
                           return null;
