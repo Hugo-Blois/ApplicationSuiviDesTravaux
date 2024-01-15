@@ -5,6 +5,7 @@ class DetailsTravaux extends StatefulWidget {
   const DetailsTravaux({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _DetailsTravauxState createState() => _DetailsTravauxState();
 }
 

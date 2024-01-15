@@ -11,6 +11,7 @@ class MapTravaux extends StatefulWidget {
   const MapTravaux({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _MapTravauxState createState() => _MapTravauxState();
 }
 
@@ -70,8 +71,7 @@ class _MapTravauxState extends State<MapTravaux> {
   }
 
   void filterTravauxFromDate() {
-    List<Travaux> filteredTravaux = allTravaux
-        .where((travaux) {
+    List<Travaux> filteredTravaux = allTravaux.where((travaux) {
       if (travaux.endAt != null) {
         // Assuming the date format is 'yyyy-MM-dd'
         DateTime endDate = DateTime.parse(travaux.endAt!);
@@ -79,8 +79,7 @@ class _MapTravauxState extends State<MapTravaux> {
       } else {
         return false;
       }
-    })
-        .toList();
+    }).toList();
     updateMarkers(filteredTravaux);
   }
 
@@ -117,8 +116,7 @@ class _MapTravauxState extends State<MapTravaux> {
                   const Spacer(),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context)
-                          .pop();
+                      Navigator.of(context).pop();
                       _navigateToDetailTravaux(context, travaux);
                     },
                     child: const Text('Voir le détail'),
@@ -232,7 +230,7 @@ class _MapTravauxState extends State<MapTravaux> {
             layers: [
               TileLayerOptions(
                 urlTemplate:
-                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: ['a', 'b', 'c'],
               ),
               MarkerLayerOptions(markers: markers),
