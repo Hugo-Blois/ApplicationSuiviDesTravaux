@@ -1,4 +1,3 @@
-
 import 'package:application_suivi_des_travaux/router.dart';
 import 'package:application_suivi_des_travaux/ui/screens/ensemble_travaux.dart';
 
@@ -31,7 +30,8 @@ class _MapTravauxState extends State<MapTravaux> {
           Marker(
             width: 80.0,
             height: 80.0,
-            point: LatLng(travaux.lat ?? 0.0, travaux.long ?? 0.0), // Coordinates for each travaux
+            point: LatLng(travaux.lat ?? 0.0, travaux.long ?? 0.0),
+            // Coordinates for each travaux
             builder: (ctx) => GestureDetector(
               onTap: () {
                 // Show a pop-up or navigate to another screen on marker click
@@ -39,7 +39,7 @@ class _MapTravauxState extends State<MapTravaux> {
               },
               child: const Icon(
                 Icons.location_on,
-                color: Colors.red, // Customize marker color if needed
+                color: Colors.redAccent, // Customize marker color if needed
                 size: 40.0,
               ),
             ),
@@ -54,47 +54,57 @@ class _MapTravauxState extends State<MapTravaux> {
 
   // Function to show a pop-up when the marker is clicked
   void _showMarkerPopup(BuildContext context, Travaux travaux) {
-    showDialog(
+    showGeneralDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            travaux.titre ?? 'No title',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          content: Text(
-            travaux.description ?? 'No description',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 18),
-          ),
-          actions: [
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'),
-                ),
-                const Spacer(),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Ferme la fenêtre contextuelle actuelle
-                    _navigateToDetailTravaux(context, travaux);
-                  },
-                  child: const Text('Voir le détail'),
-                ),
-              ],
+      pageBuilder: (ctx, a1, a2) {
+        return Container();
+      },
+      transitionBuilder: (ctx, a1, a2, child) {
+        var curve = Curves.easeInOut.transform(a1.value);
+        return Transform.scale(
+          scale: curve,
+          child: AlertDialog(
+            title: Text(
+              travaux.titre ?? 'No title',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-          ],
+            content: Text(
+              travaux.description ?? 'No description',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 18),
+            ),
+            actions: [
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pop(); // Ferme la fenêtre contextuelle actuelle
+                      _navigateToDetailTravaux(context, travaux);
+                    },
+                    child: const Text('Voir le détail'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
       },
+      transitionDuration: const Duration(milliseconds: 300),
     );
   }
 
   void _navigateToDetailTravaux(BuildContext context, Travaux travaux) {
-    Navigator.of(context).pushNamed(AppRouter.detailTravaux, arguments: travaux);
+    Navigator.of(context)
+        .pushNamed(AppRouter.detailTravaux, arguments: travaux);
   }
 
   void zoomIn() {
@@ -108,6 +118,17 @@ class _MapTravauxState extends State<MapTravaux> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          "Carte des Travaux d'Angers",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.lightGreen[800],
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+        ),
+      ),
       body: Stack(
         children: [
           FlutterMap(
@@ -150,18 +171,39 @@ class _MapTravauxState extends State<MapTravaux> {
             child: ElevatedButton(
               onPressed: () {
                 // Naviguer vers la page des détails des travaux
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EnsembleTravaux(),
-                  ),
-                );
+                Navigator.of(context).push(_createRoute());
               },
-              child: const Text('Voir tous les travaux'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightGreen[800], // Couleur du fond du bouton en vert
+              ),
+              child: const Text(
+                'Voir tous les travaux',
+                style: TextStyle(color: Colors.white), // Couleur du texte en blanc
+              ),
             ),
           ),
         ],
       ),
     );
   }
+}
+
+// Ajoutez cette fonction à votre code pour créer la transition
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        const EnsembleTravaux(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
