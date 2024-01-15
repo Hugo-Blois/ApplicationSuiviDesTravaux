@@ -205,7 +205,7 @@ class _MapTravauxState extends State<MapTravaux> {
                     ),
                   ),
                 ),
-                SizedBox(height: 8.0),
+                SizedBox(height: 20.0),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
