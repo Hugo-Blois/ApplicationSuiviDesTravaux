@@ -1,9 +1,13 @@
+import 'package:application_suivi_des_travaux/models/notes_state.dart';
 import 'package:application_suivi_des_travaux/router.dart';
 import 'package:application_suivi_des_travaux/ui/screens/ensemble_travaux.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import '../../blocs/notes_cubit.dart';
+import '../../models/note.dart';
 import '../../models/travaux.dart';
 import '../../repositories/travaux_repository.dart';
 
@@ -70,8 +74,7 @@ class _MapTravauxState extends State<MapTravaux> {
   }
 
   void filterTravauxFromDate() {
-    List<Travaux> filteredTravaux = allTravaux
-        .where((travaux) {
+    List<Travaux> filteredTravaux = allTravaux.where((travaux) {
       if (travaux.endAt != null) {
         // Assuming the date format is 'yyyy-MM-dd'
         DateTime endDate = DateTime.parse(travaux.endAt!);
@@ -79,8 +82,7 @@ class _MapTravauxState extends State<MapTravaux> {
       } else {
         return false;
       }
-    })
-        .toList();
+    }).toList();
     updateMarkers(filteredTravaux);
   }
 
@@ -88,45 +90,61 @@ class _MapTravauxState extends State<MapTravaux> {
     showGeneralDialog(
       context: context,
       pageBuilder: (ctx, a1, a2) {
-        return Container();
+        return BlocBuilder<NotesCubit, NotesState>(
+          builder: (context, notesState) {
+            Note correspondingNote = notesState.notes
+                .firstWhere((note) => note.id == travaux.id, orElse: null);
+
+            return AlertDialog(
+              title: Text(
+                travaux.titre ?? 'No title',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              content: Column(
+                children: [
+                  Text(
+                    travaux.description ?? 'No description',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(height: 10),
+                    Text(
+                      correspondingNote.notes ?? 'Aucune Remarque',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 18),
+                    )
+                ],
+              ),
+              actions: [
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('OK'),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        _navigateToDetailTravaux(context, travaux);
+                      },
+                      child: const Text('Voir le détail'),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
       },
       transitionBuilder: (ctx, a1, a2, child) {
         var curve = Curves.easeInOut.transform(a1.value);
         return Transform.scale(
           scale: curve,
-          child: AlertDialog(
-            title: Text(
-              travaux.titre ?? 'No title',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            content: Text(
-              travaux.description ?? 'No description',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 18),
-            ),
-            actions: [
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('OK'),
-                  ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pop();
-                      _navigateToDetailTravaux(context, travaux);
-                    },
-                    child: const Text('Voir le détail'),
-                  ),
-                ],
-              ),
-            ],
-          ),
+          child: child,
         );
       },
       transitionDuration: const Duration(milliseconds: 300),
@@ -232,7 +250,7 @@ class _MapTravauxState extends State<MapTravaux> {
             layers: [
               TileLayerOptions(
                 urlTemplate:
-                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: ['a', 'b', 'c'],
               ),
               MarkerLayerOptions(markers: markers),
